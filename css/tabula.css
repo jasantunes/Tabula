@@ -50,6 +50,7 @@ ul {
 	padding: 10px;
   padding-right: 20px; /* after rotation, this is top */
 	position: absolute;
+	height: 40px;
 	right: 100%;
 	white-space: nowrap;
 }
@@ -57,7 +58,7 @@ ul {
 #previous {
 	float: left;
   width: 40%;
-  margin:0px 40px auto;
+  margin: 0px 0px auto 40px /* show_previous */;
   padding: 10px;
 	max-height: 100%;
 	overflow: auto;
@@ -65,8 +66,8 @@ ul {
 
 #recent {
   float: right;
-	width: 40%;
-  margin: auto 40px auto auto;
+	width: 50%;
+  margin: auto 40px auto 0px;
   padding: 10px;
 }
 
