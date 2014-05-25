@@ -1,0 +1,14 @@
+{
+  "manifest_version": 2,
+  "name": "Tabula",
+  "version": "0.0.1",
+  "description":  "A beautiful todo list.",
+  "icons": {
+    "16": "images/icon-16.png",
+    "128": "images/icon-128.png"
+  },
+  "incognito": "split",
+  "chrome_url_overrides": { "newtab": "index.html" },
+  "permissions": [ "storage" ]
+}
+
