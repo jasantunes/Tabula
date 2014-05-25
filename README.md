@@ -12,6 +12,15 @@ I was inspired by the beautiful design ans simplistic approch of the chrome exte
 If you like Tabular and you'd like to improve it, embrace the open source spirit, clone the git repository, change it, tweak it, and make it even more awesome.
 
 
+# Screenshots
+
+[Screenshot 1](screenshots/Tabula1.png)
+
+[Screenshot 2](screenshots/Tabula2.png)
+
+[Screenshot 3](screenshots/Tabula3.png)
+
+
 # LICENSE
 
 Licensed under the Apache License, Version 2.0 (the "License");
