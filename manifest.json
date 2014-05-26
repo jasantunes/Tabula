@@ -1,8 +1,9 @@
 {
   "manifest_version": 2,
-  "name": "Tabula",
-  "version": "0.0.2",
-  "description":  "A beautiful TODO list and that tracks your work and stays in sync.",
+  "name": "Tabula (New Tab To Do List)",
+  "version": "0.0.3",
+  "description":  "Replace your New Tab Page with a beautiful to-do list
+                   that logs your work and is always in sync.",
   "icons": {
     "16": "images/icon-16.png",
     "128": "images/icon-128.png"
