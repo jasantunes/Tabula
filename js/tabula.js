@@ -79,13 +79,13 @@ Tabula.controller('Controller', ['$scope', '$filter', function($scope, $filter) 
     // Load saved data.
     if (value && value.todolist) {
       $scope.todos = value.todolist;
-//    } else {
-//      $scope.todos = {
+    } else {
+      $scope.todos = {
 //          123000 : [ {done:true,  text:"event1", deleted:false}, {done:true,  text:"event2", deleted:false}],
 //          456000 : [ {done:false, text:"event3", deleted:false}, {done:true,  text:"event4", deleted:false},  {done:true, text:"event5", deleted:false}],
 //          789000 : [ {done:false,  text:"event6", deleted:false}, {done:false, text:"event7", deleted:false}],
 //          999000 : [ {done:false,  text:"event3", deleted:false}, {done:true, text:"event7", deleted:false}]
-//      };
+      };
     }
     
     // If there's no entry for today, populate new today entry with all pending todo items.
