@@ -14,11 +14,11 @@ If you like Tabular and you'd like to improve it, embrace the open source spirit
 
 # Screenshots
 
-[Screenshot 1](screenshots/Tabula1.png)
+<img src="https://raw.github.com/jasantunes/Tabula/master/screenshots/Tabula1.png"></img>
 
-[Screenshot 2](screenshots/Tabula2.png)
+<img src="https://raw.github.com/jasantunes/Tabula/master/screenshots/Tabula2.png"></img>
 
-[Screenshot 3](screenshots/Tabula3.png)
+<img src="https://raw.github.com/jasantunes/Tabula/master/screenshots/Tabula3.png"></img>
 
 
 # LICENSE
