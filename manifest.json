@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
   "name": "Tabula",
-  "version": "0.0.1",
-  "description":  "A beautiful todo list.",
+  "version": "0.0.2",
+  "description":  "A beautiful TODO list and that tracks your work and stays in sync.",
   "icons": {
     "16": "images/icon-16.png",
     "128": "images/icon-128.png"
