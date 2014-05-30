@@ -1,23 +1,29 @@
 
+body {
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
 .background {
-	background-image:url("../images/01.jpg");
+  background-image:url("../images/01.jpg"); /* default image in credits */
+  -webkit-background-size: 100% auto; 
   background-size: 100% auto;
-  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;	
+  -webkit-background-size: cover; 
+  background-size: cover; 
   box-shadow:  inset 0px 0px 300px 40px rgba(0, 0, 0, .5);
 }
 
 .backdrop {
-	text-shadow: 1px 1px 1px black;
+  text-shadow: 1px 1px 1px black;
   background: rgba(0, 0, 0, .4);
 }
 
 ul {
-	margin: 10px;
+  margin: 10px;
   list-style: none;
 }
 
 #container {
-	width: 100%;
+  width: 100%;
   min-height:100%;
   height:100%;
   position:absolute;
@@ -31,7 +37,7 @@ ul {
 }
 
 #body {
-	vertical-align: middle;
+  vertical-align: middle;
   padding-top:20px;
   padding-bottom:20px;  /* Height of the footer */
 }
@@ -45,28 +51,29 @@ ul {
 
 
 #show_previous {
+  /* rotate 270 degrees */
   -webkit-transform: rotate(270deg);
   -webkit-transform-origin: right top 0;
-	padding: 10px;
+  padding: 10px;
   padding-right: 20px; /* after rotation, this is top */
-	position: absolute;
-	height: 40px;
-	right: 100%;
-	white-space: nowrap;
+  position: absolute;
+  height: 40px;
+  right: 100%;
+  white-space: nowrap;
 }
 
 #previous {
-	float: left;
+  float: left;
   width: 40%;
-  margin: 0px 0px auto 40px /* show_previous */;
+  margin: 0px 0px auto 40px /* 40px for show_previous */;
   padding: 10px;
-	max-height: 100%;
-	overflow: auto;
+  max-height: 100%;
+  overflow: auto;
 }
 
 #recent {
   float: right;
-	width: 50%;
+  width: 50%;
   margin: auto 40px auto 0px;
   padding: 10px;
 }
@@ -82,7 +89,7 @@ ul {
 
 a, a:hover {
   color: white;
-	text-decoration:none;
+  text-decoration:none;
 }
 .event_done_true {
   text-decoration:line-through;
@@ -92,7 +99,7 @@ a, a:hover {
  * Alerts
  */
 .alert {
-	padding: 5px;
+  padding: 5px;
   background: rgba(255, 255, 0, 0.5);
 } 
  
@@ -108,4 +115,3 @@ a, a:hover {
   color: white;
   float: right;
 }
-
