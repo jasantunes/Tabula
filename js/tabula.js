@@ -1,3 +1,6 @@
+// Initializes to-do list with testing items instead of loading them from storage.
+debug = false;
+
 /**
  * Based on https://developer.chrome.com/apps/app_codelab5_data
  */
@@ -6,8 +9,6 @@ function dateNDaysAgo(n) {
   var now = new Date();
   return new Number(new Date(now.getFullYear(), now.getMonth(), now.getDate()-n));
 }
-
-
 
 var Tabula = angular.module('Tabula', ['xeditable']);
 
@@ -59,9 +60,8 @@ Tabula.filter('showRecentDays', function() {
 });
 
 Tabula.controller('Controller', ['$scope', '$filter', function($scope, $filter) {
-  debug = false;
-  
-  // Notice that chrome.storage.sync.get is asynchronous
+	
+	// Notice that chrome.storage.sync.get is asynchronous
   chrome.storage.sync.get('todolist', function(value) {
     // The $apply is only necessary to execute the function inside Angular scope
     $scope.$apply(function() {
@@ -82,13 +82,13 @@ Tabula.controller('Controller', ['$scope', '$filter', function($scope, $filter) 
     $scope.bg_of_the_day =  backgrounds[rnd_index];
     console.log("Background of the day: " + $scope.bg_of_the_day.file);
     
-    /* Initialization for debugging purposes. */
+    // Initialization for debugging purposes.
     if (debug) {
       $scope.todos = {
-          123000 : [ {done:true,  text:"event1", deleted:false}, {done:true,  text:"event2", deleted:false}],
-          456000 : [ {done:false, text:"event3", deleted:false}, {done:true,  text:"event4", deleted:false},  {done:true, text:"event5", deleted:false}],
-          789000 : [ {done:false,  text:"event6", deleted:false}, {done:false, text:"event7", deleted:false}],
-          999000 : [ {done:false,  text:"event3", deleted:false}, {done:true, text:"event7", deleted:false}]
+          123000000000 : [ {done:true,  text:"event1", deleted:false}, {done:true,  text:"event2", deleted:false}],
+          456000000000 : [ {done:false, text:"event3", deleted:false}, {done:true,  text:"event4", deleted:false},  {done:true, text:"event5", deleted:false}],
+          789000000000 : [ {done:false,  text:"event6", deleted:false}, {done:false, text:"event7", deleted:false}],
+          999000000000 : [ {done:false,  text:"event3", deleted:false}, {done:true, text:"event7", deleted:false}]
       };
     }
     // Load saved data.
