@@ -9,7 +9,7 @@ function dateNDaysAgo(n) {
 
 
 
-var Tabula = angular.module('Tabula', ["xeditable"]);
+var Tabula = angular.module('Tabula', ['xeditable']);
 
 Tabula.run(function(editableOptions) {
   editableOptions.theme = 'default'; // default, bs2 or bs3
@@ -59,6 +59,7 @@ Tabula.filter('showRecentDays', function() {
 });
 
 Tabula.controller('Controller', ['$scope', '$filter', function($scope, $filter) {
+  debug = false;
   
   // Notice that chrome.storage.sync.get is asynchronous
   chrome.storage.sync.get('todolist', function(value) {
@@ -71,21 +72,28 @@ Tabula.controller('Controller', ['$scope', '$filter', function($scope, $filter) 
   // Load data from storage.
   $scope.load = function(value) {
     
+    // Alerts.
+    $scope.alert_today_was_populated = false;
+
+    // Initialization of to-do items.
+    $scope.todos = {};
+    
     // Get background of the day
     $scope.bg_of_the_day =  backgrounds[rnd_index];
     console.log("Background of the day: " + $scope.bg_of_the_day.file);
     
-    
-    // Load saved data.
-    if (value && value.todolist) {
-      $scope.todos = value.todolist;
-    } else {
+    /* Initialization for debugging purposes. */
+    if (debug) {
       $scope.todos = {
-//          123000 : [ {done:true,  text:"event1", deleted:false}, {done:true,  text:"event2", deleted:false}],
-//          456000 : [ {done:false, text:"event3", deleted:false}, {done:true,  text:"event4", deleted:false},  {done:true, text:"event5", deleted:false}],
-//          789000 : [ {done:false,  text:"event6", deleted:false}, {done:false, text:"event7", deleted:false}],
-//          999000 : [ {done:false,  text:"event3", deleted:false}, {done:true, text:"event7", deleted:false}]
+          123000 : [ {done:true,  text:"event1", deleted:false}, {done:true,  text:"event2", deleted:false}],
+          456000 : [ {done:false, text:"event3", deleted:false}, {done:true,  text:"event4", deleted:false},  {done:true, text:"event5", deleted:false}],
+          789000 : [ {done:false,  text:"event6", deleted:false}, {done:false, text:"event7", deleted:false}],
+          999000 : [ {done:false,  text:"event3", deleted:false}, {done:true, text:"event7", deleted:false}]
       };
+    }
+    // Load saved data.
+    else if (value && value.todolist) {
+      $scope.todos = value.todolist;
     }
     
     // If there's no entry for today, populate new today entry with all pending todo items.
@@ -124,7 +132,14 @@ Tabula.controller('Controller', ['$scope', '$filter', function($scope, $filter) 
         console.log("finally adding: " + pending_items[t]);
         $scope.todos[now].push({done:false, text:pending_items[t], deleted:false});        
       }
+      
+      if ($scope.todos[now].length > 0) {
+        $scope.alert_today_was_populated = true;
+      }
+      
     } // if (!has_today_items)
+    
+      
   };
 
   $scope.save = function() {
