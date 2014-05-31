@@ -1,3 +1,6 @@
+<a target="_blank" href="https://chrome.google.com/webstore/detail/tabula-new-tab-to-do-list/pnadejonabhdibgdmgfcomljhddlpfcc">![Try it now in Crome Web Store](https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_340x96.png "Click here to install this extension from the Chrome Web Store")</a>
+
+
 Tabula
 =======
 
@@ -14,11 +17,11 @@ If you like Tabular and you'd like to improve it, embrace the open source spirit
 
 # Screenshots
 
-<img src="https://raw.github.com/jasantunes/Tabula/master/screenshots/Tabula1.png"></img>
+![Screenshot 1](https://raw.github.com/jasantunes/Tabula/master/screenshots/Tabula1.png)
 
-<img src="https://raw.github.com/jasantunes/Tabula/master/screenshots/Tabula2.png"></img>
+![Screenshot 2](https://raw.github.com/jasantunes/Tabula/master/screenshots/Tabula2.png)
 
-<img src="https://raw.github.com/jasantunes/Tabula/master/screenshots/Tabula3.png"></img>
+![Screenshot 3](https://raw.github.com/jasantunes/Tabula/master/screenshots/Tabula3.png)
 
 
 # LICENSE
