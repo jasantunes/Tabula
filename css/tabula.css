@@ -5,6 +5,7 @@ body {
 
 .background {
   background-image:url("../images/01.jpg"); /* default image in credits */
+  background-position:center;
   -webkit-background-size: 100% auto; 
   background-size: 100% auto;
   -webkit-background-size: cover; 
