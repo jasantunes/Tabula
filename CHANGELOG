@@ -1,0 +1,56 @@
+2014-06-06  Joao Antunes  <jasantunes@gmail.com>
+
+	Small tweaks to css and code readability.
+
+2014-06-02  Joao Antunes  <jasantunes@gmail.com>
+
+	Adds identity permissions, centers background and bumps version in manifest.
+
+2014-05-30  Joao Antunes  <jasantunes@gmail.com>
+
+	Adds a try it now button to README.md
+
+	Updates version to 0.0.4
+
+	Improves debugging data.
+
+	Fixes issue #1.
+
+	Adds alert for when today's entry was automatically populated with unfinished to-dos.
+
+2014-05-25  Joao Antunes  <jasantunes@gmail.com>
+
+	Updates manifest file with better name and description.
+
+	Updates manifest.
+
+	Updates credits.html with github URL.
+
+	Fixes initialization of todo list.
+
+	Adds gitlog-to-changelog.sh to generate changelogs.
+
+	Adds generate_zip.sh to generate extension zip package.
+
+	Adds .gitignore file.
+
+	Updates README.md file with inline screenshots.
+
+	Updates README.md file.
+
+	Adds screenshots.
+
+	Small css tweaks.
+
+	Initial version.
+	Main features:
+	- Synchronized todo items across your google chrome instances.
+	- Ability to access old todo items (Show Previous Entries).
+	- Searchable todo items.
+	- Editable todo items in place.
+	- Automatically populates today's entry with unfinished todo items.
+	- Random background (our of 6).
+
+2014-05-25  jasantunes  <jasantunes@gmail.com>
+
+	Initial commit

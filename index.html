@@ -1,84 +1,87 @@
 <!doctype html>
 <html ng-app="Tabula" ng-csp>
-  <head>
-    <script src="js/angular.min.js"></script>
-    <script src="js/xeditable.min.js"></script>
-    <script src="js/backgrounds.js"></script>
-    <script src="js/tabula.js"></script>
-    <link href="css/bootstrap-theme.min.css" rel="stylesheet">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/xeditable.css" rel="stylesheet">
-    <link href="css/tabula.css" rel="stylesheet">
-  </head>
-  
-  <body ng-controller="Controller">
+	<head>
+		<script src="js/angular.min.js"></script>
+		<script src="js/xeditable.min.js"></script>
+		<script src="js/backgrounds.js"></script>
+		<script src="js/tabula.js"></script>
+		<link href="css/bootstrap-theme.min.css" rel="stylesheet">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/xeditable.css" rel="stylesheet">
+		<link href="css/tabula.css" rel="stylesheet">
+	</head>
+	
+	<body ng-controller="TabulaController">
+		<!-- container -->
+		<div id="container" class="background" ng-style="{'background-image':'url('+bg_of_the_day.file+')'}">
+			
+			<!-- body -->
+			<div id="body">
 
-  <div id="container" class="background" ng-style="{'background-image':'url('+bg_of_the_day.file+')'}">
+				<!-- show previous entries button -->
+				<div id="show_previous" class="backdrop">
+					<a class="event" href ng-click="show_previous=!show_previous">Show Previous Entries</a>
+				</div>
+				<!-- end of show previous entries button -->
+				
+				<!-- previous entries -->
+				<div id="previous" class="backdrop event" ng-show="show_previous">
+					<h2>Previous Entries</h2>
+					<span>search: <input type="text" ng-model="query"/></span>
+						<ul class="event">
+							<li ng-repeat="item in todos | orderObjectBy:'$key':1:true">
+								<h3>{{item.key | date:'EEEE, MMMM d, yyyy'}}</h3>
+								<ul class="event" >
+									<li ng-repeat="event in item | filter: query">
+										<input type="checkbox" ng-model="event.done" ng-checked="event.done" ng-change="save()"/>
+										<a href="#" class="event event_done_{{event.done}}" title="click to edit" e-form="itemForm" ng-click="itemForm.$show()" buttons="no" editable-textarea="event.text" blur="submit" onaftersave="save()">{{event.text || save()}}</a>
+										<button class="btn btn-danger" ng-click="event.deleted=true; save()" ng-hide="!itemForm.$visible">delete</button>
+									</li>
+								</ul>
+							</li>
+						</ul>
+				</div>
+				<!-- end of previous entries -->
 
-    <!-- Body -->
-    <div id="body">
-    
-    <div id="show_previous" class="backdrop">
-      <a href ng-click="show_previous = !show_previous">Show Previous Entries</a>
-    </div>
-      
-      <!-- Left div: Previous entries -->
-      <div id="previous" class="backdrop" ng-show="show_previous">
-	      <h2 class="event_header">Previous Entries</h2>
-	      <span class="event_text">search: <input type="text" ng-model="query"/></span>
-	      <ul>
-	      <li ng-repeat="item in todos | orderObjectBy:'$key':1:false">
-	        <h3 class="event_header">{{ item.key | date:'EEEE, MMMM d, yyyy'}}</h3>
-	        <ul>
-	        <li ng-repeat="event in item | filter: query">
-	          <input type="checkbox" ng-model="event.done" ng-checked="event.done" ng-change="save()">
-	          <a href="#" class="event_text event_done_{{event.done}}" title="click to edit" e-form="itemForm" ng-click="itemForm.$show()" buttons="no" editable-text="event.text">{{event.text || save()}}</a>
-	          <button class="btn btn-danger" ng-click="event.deleted=true; save()" ng-hide="!itemForm.$visible">delete</button>
-	        </li>
-	        </ul>
-	      </li>
-	      </ul>
-      </div>
-      <!-- Left div: All entries -->
+				<!-- main -->
+				<div id="main" class="backdrop">
+					<ul class="event">
+						<li ng-repeat="item in todos | showRecentDays:0">
+							<h1>{{ item.key | date:'EEEE, MMMM d, yyyy'}}</h1>
+							<div class="alert alert_warning" ng-show="alert_today_was_populated">
+								Hi! I populated today's entry with your unfinished to-dos.
+								<button type="button" class="close" aria-hidden="true"
+								ng-click="alert_today_was_populated = false">&times;</button>
+							</div>
+							<ul class="event">
+								<li ng-repeat="event in item">
+									<input type="checkbox" ng-model="event.done" ng-checked="event.done" ng-change="save()"/>
+									<a href="#" class="event event_done_{{event.done}}" title="click to edit" e-form="itemForm" ng-click="itemForm.$show()" buttons="no" editable-textarea="event.text" blur="submit" onaftersave="save()">{{event.text || save()}}</a>
+									<button class="btn btn-danger" ng-click="event.deleted=true; save()" ng-hide="!itemForm.$visible">delete</button>
+								</li>
+							</ul>
+						</ul>
 
-      <!-- Right div: Recent entries -->
-      <div id="recent" class="backdrop">
-      <ul>
-      <li ng-repeat="item in todos | showRecentDays:0">
-        <h1 class="event_header event_today">{{ item.key | date:'EEEE, MMMM d, yyyy'}}</h1>
-        <div class="alert alert_warning" ng-show="alert_today_was_populated">
-          Hi! I populated today's entry with your unfinished to-dos.
-          <button type="button" class="close" aria-hidden="true"
-                  ng-click="alert_today_was_populated = false">&times;</button>
-        </div>
-        <ul>
-        <li ng-repeat="event in item">
-          <input type="checkbox" ng-model="event.done" ng-checked="event.done" ng-change="save()">
-          <a href="#" class="event_text event_done_{{event.done}}" title="click to edit" e-form="itemForm" ng-click="itemForm.$show()" buttons="no" editable-text="event.text">{{event.text || save()}}</a>
-          <button class="btn btn-danger" ng-click="event.deleted=true; save()" ng-hide="!itemForm.$visible">delete</button>
-        </li>
-        </ul>
-      </ul>
-      <!-- Add new item -->
-	    <form ng-submit="addTodo() || save()">
-      <div class="input-group">
-        <input type="text" class="form-control" ng-model="todoText" placeholder="add new task here">
-        <span class="input-group-btn">
-		      <input type="submit" class="btn btn-primary" value="add">
-        </span>
-      </div>
-	    
-	    </form>
-      </div> <!-- recent -->
+						<!-- Add new item -->
+						<form ng-submit="addTodo() || save()">
+							<div class="input-group">
+								<input type="text" class="form-control" ng-model="todoText" placeholder="add new task here">
+								<span class="input-group-btn">
+								<input type="submit" class="btn btn-primary" value="add">
+								</span>
+							</div>	
+						</form>
 
-    </div> <!-- Body -->
-    
-    <!-- Footer -->
-    <div id="footer" class="backdrop">
-    <span class="footer_info_background"><a href="{{bg_of_the_day.url}}" target="_blank">{{bg_of_the_day.title}}</a>, by {{bg_of_the_day.author}}</span>
-    <span class="footer_info_credits"><a href="credits.html">Credits</a></span>
-    </div> <!-- Footer -->      
+					</div> <!-- end of main -->
 
-  </div> <!-- container -->
-  </body>
-</html>
+				</div> <!-- end of body -->
+				
+				<!-- footer -->
+				<div id="footer" class="backdrop footer">
+					<span id="footer_info_background"><a class="footer" href="{{bg_of_the_day.url}}" target="_blank">{{bg_of_the_day.title}}</a>, by {{bg_of_the_day.author}}</span>
+					<span id="footer_info_credits"><a class="footer" href="credits.html">Credits</a></span>
+				</div> <!-- end of footer -->
+
+			</div> <!-- end of container -->
+		</body>
+	</html>

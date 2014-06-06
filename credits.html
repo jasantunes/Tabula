@@ -1,54 +1,62 @@
 <html ng-app="myApp" ng-csp>
-  <head>
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/tabula.css" rel="stylesheet">
-  </head>
-  
-  <body>
-  <div id="container" class="background" ng-style="{'background-image':'url('+bg_of_the_day.file+')'}">
+	<head>
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/tabula.css" rel="stylesheet">
+	</head>
+	
+	<body>
+		<!-- container -->
+		<div id="container" class="background" ng-style="{'background-image':'url('+bg_of_the_day.file+')'}">
+			
+			<!-- body -->
+			<div id="body">
+				
+				<!-- main -->
+				<div id="main" class="backdrop">
+					<h1>Credits</h1>
 
-    <!-- body -->
-    <div id="body">
-    
-	    <div id="recent" class="backdrop event_text">
-	    <h1>Credits</h1>
-	    Maintainer:
-		    <ul>
-		      <li><a href="http://jasantunes.blogspot.com">Joao Antunes</a></li>
-		    </ul>
-      Icon:
-        <ul>
-          <li><a href="http://www.designmodo.com">Flat UI Free</a>, by Designmodo</li>
-        </ul>      
-	    Background images:
-	      <ul>
-	        <li><a href="https://www.flickr.com/photos/ragnar1984/2915447817">River of clouds</a>, by Ragnar Jensen</li>
-	        <li><a href="https://www.flickr.com/photos/23737778@N00/7115229223">Kansas Summer Wheat and Storm Panorama</a>, by James Watkins</li>
-	        <li><a href="https://www.flickr.com/photos/72213316@N00/3976007814">Stitched shot of Mt. Rainier and Little Tahoma reflected on Bench Lake</a>, by Frank Kovalchek</li>
-	        <li><a href="https://www.flickr.com/photos/jamesthefirst/7103126949">Landscape outside Barnwell</a>, by Jamesthe1st</li>
-	        <li><a href="https://www.flickr.com/photos/tomsoperphotography/7848685990">Landscape 2011</a>, by Tom Soper</li>
-	        <li><a href="https://www.flickr.com/photos/katsrcool/11930377725">Snowy Landscape</a>, by katsrcool</li>
-	      </ul>      
-	      <p>
-	        All images are licensed under <a href="https://creativecommons.org/licenses/by/2.0/">
-	        Creative Commons Attribution 2.0 Generic</a>
-	      </p>
-	    </ul>  
-	    
-	    <h1>Contribute</h1>
-	    <p>Project hosted on <a href="https://github.com/jasantunes/Tabula">Github</a></p>    
-	    <p>Want to see your picture as a background? Contact me on github</p>
-	    
-	    </div> <!-- recent -->
-	    
-    </div> <!-- body -->
+					Maintainer:
+					<ul>
+						<li><a class="footer" href="http://jasantunes.blogspot.com">Joao Antunes</a></li>
+					</ul>
+					
+					Icon:
+					<ul>
+						<li><a class="footer" href="http://www.designmodo.com">Flat UI Free</a>, by Designmodo</li>
+					</ul>
+					
+					Background images:
+					<ul>
+						<li><a class="footer" href="https://www.flickr.com/photos/ragnar1984/2915447817">River of clouds</a>, by Ragnar Jensen</li>
+						<li><a class="footer" href="https://www.flickr.com/photos/23737778@N00/7115229223">Kansas Summer Wheat and Storm Panorama</a>, by James Watkins</li>
+						<li><a class="footer" href="https://www.flickr.com/photos/72213316@N00/3976007814">Stitched shot of Mt. Rainier and Little Tahoma reflected on Bench Lake</a>, by Frank Kovalchek</li>
+						<li><a class="footer" href="https://www.flickr.com/photos/jamesthefirst/7103126949">Landscape outside Barnwell</a>, by Jamesthe1st</li>
+						<li><a class="footer" href="https://www.flickr.com/photos/tomsoperphotography/7848685990">Landscape 2011</a>, by Tom Soper</li>
+						<li><a class="footer" href="https://www.flickr.com/photos/katsrcool/11930377725">Snowy Landscape</a>, by katsrcool</li>
+					</ul>
 
-    <!-- Footer -->
-    <div id="footer" class="backdrop">
-    <span class="footer_info_credits"><a href="index.html">Back</a></span>
-    </div>
-    <!-- Footer -->      
+					<p>
+					All images are licensed under <a class="footer" href="https://creativecommons.org/licenses/by/2.0/">Creative Commons Attribution 2.0 Generic</a>
+					</p>
+				</ul>
+				
+				<h1>Contribute</h1>
+				<p>Project hosted on <a class="footer" href="https://github.com/jasantunes/Tabula">Github</a></p>
+				<p>Want to see your picture as a background? Contact me on github</p>
+				
+			</div>
+			<!-- end of main -->
+			
+		</div>
+		<!-- end of body -->
 
-  </div>
-  </body>
+		<!-- footer -->
+		<div id="footer" class="backdrop">
+			<span id="footer_info_credits"><a class="footer" href="index.html">Back</a></span>
+		</div>
+		<!-- end of footer -->
+
+	</div>
+	<!-- end of container -->
+</body>
 </html>

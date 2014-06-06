@@ -1,9 +1,6 @@
+
 // Initializes to-do list with testing items instead of loading them from storage.
 debug = false;
-
-/**
- * Based on https://developer.chrome.com/apps/app_codelab5_data
- */
 
 function dateNDaysAgo(n) {
   var now = new Date();
@@ -59,7 +56,7 @@ Tabula.filter('showRecentDays', function() {
   };
 });
 
-Tabula.controller('Controller', ['$scope', '$filter', function($scope, $filter) {
+function TabulaController($scope, $filter, $http, gdocs) {
 	
 	// Notice that chrome.storage.sync.get is asynchronous
   chrome.storage.sync.get('todolist', function(value) {
@@ -88,7 +85,8 @@ Tabula.controller('Controller', ['$scope', '$filter', function($scope, $filter) 
           123000000000 : [ {done:true,  text:"event1", deleted:false}, {done:true,  text:"event2", deleted:false}],
           456000000000 : [ {done:false, text:"event3", deleted:false}, {done:true,  text:"event4", deleted:false},  {done:true, text:"event5", deleted:false}],
           789000000000 : [ {done:false,  text:"event6", deleted:false}, {done:false, text:"event7", deleted:false}],
-          999000000000 : [ {done:false,  text:"event3", deleted:false}, {done:true, text:"event7", deleted:false}]
+          999000000000 : [ {done:false,  text:"event3", deleted:false}, {done:true, text:"event7", deleted:false}],
+          1000000000000 : [ {done:false,  text:"event3", deleted:false}, {done:true, text:"event7", deleted:false}]
       };
     }
     // Load saved data.
@@ -111,7 +109,7 @@ Tabula.controller('Controller', ['$scope', '$filter', function($scope, $filter) 
           
           if (!older_items[day][i].done) {
             // Add all todo items in which we worked on (and haven't concluded).
-            if(existing_index == -1) {
+            if(existing_index < 0) {
               console.log("adding: " + event_text);
               pending_items.push(event_text);
             }
@@ -120,7 +118,7 @@ Tabula.controller('Controller', ['$scope', '$filter', function($scope, $filter) 
           else {
             // But remove the todo item if we have conclude it.
             console.log("removing: " + event_text);
-            if(existing_index != -1) {
+            if(existing_index >=0 ) {
               pending_items.splice(existing_index, 1);
             }
           }
@@ -128,20 +126,22 @@ Tabula.controller('Controller', ['$scope', '$filter', function($scope, $filter) 
       }
       
       // Now add all pending items to today's entry.
-      for (var t in pending_items) {
-        console.log("finally adding: " + pending_items[t]);
-        $scope.todos[now].push({done:false, text:pending_items[t], deleted:false});        
-      }
-      
-      if ($scope.todos[now].length > 0) {
-        $scope.alert_today_was_populated = true;
+      if (pending_items.length > 0) {
+	      $scope.alert_today_was_populated = true;
+	      for (var t in pending_items) {
+	        console.log("finally adding: " + pending_items[t]);
+	        $scope.todos[now].push({done:false, text:pending_items[t], deleted:false});        
+	      }
       }
       
     } // if (!has_today_items)
     
       
   };
-
+  
+  /*
+   * Save data to storage.
+   */
   $scope.save = function() {
     for (var day in $scope.todos) {
       var is_empty = true;
@@ -165,10 +165,9 @@ Tabula.controller('Controller', ['$scope', '$filter', function($scope, $filter) 
     console.log("saved");
   };
   
-  $scope.remove = function(scope) {
-    scope.remove();
-  };
-
+  /*
+   * Add new to-do (today).
+   */
   $scope.addTodo = function() {
     var now = dateNDaysAgo(0);
     
@@ -183,15 +182,10 @@ Tabula.controller('Controller', ['$scope', '$filter', function($scope, $filter) 
     // Clear the form.
     $scope.todoText = '';
   };
-
-  $scope.remaining = function() {
-    var count = 0;
-    angular.forEach($scope.todos, function(item) {
-      count += item.done ? 0 : 1;
-    });
-    return count;
-  };
- 
+  
+  /*
+   * Archive (delete all elements for now).
+   */
   $scope.archive = function() {
     var oldTodos = $scope.todos;
     $scope.todos = {};
@@ -199,4 +193,7 @@ Tabula.controller('Controller', ['$scope', '$filter', function($scope, $filter) 
 //      if (!item.done) $scope.todos.push(item);
 //    });
   };
-}]);
+}
+
+TabulaController.$inject = [ '$scope', '$filter' ];
+

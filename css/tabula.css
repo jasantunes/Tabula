@@ -1,11 +1,11 @@
 
 body {
-  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .background {
   background-image:url("../images/01.jpg"); /* default image in credits */
-  background-position:center;
+  background-position: center;
   -webkit-background-size: 100% auto; 
   background-size: 100% auto;
   -webkit-background-size: cover; 
@@ -16,40 +16,43 @@ body {
 .backdrop {
   text-shadow: 1px 1px 1px black;
   background: rgba(0, 0, 0, .4);
-}
-
-ul {
-  margin: 10px;
-  list-style: none;
+  color: white;
 }
 
 #container {
   width: 100%;
-  min-height:100%;
-  height:100%;
-  position:absolute;
+  min-height: 100%;
+  height: 100%;
+  position: absolute;
 }
 
 #header {
-  position:absolute;
-  top:0;
-  width:100%;
-  height:20px;  /* Height of the footer */
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 20px;  /* Height of the footer */
 }
 
 #body {
   vertical-align: middle;
-  padding-top:20px;
-  padding-bottom:20px;  /* Height of the footer */
+  padding-top: 20px;
+  padding-bottom: 20px;  /* Height of the footer */
+  height: 100%;
 }
 
 #footer {
-  position:absolute;
-  bottom:0;
-  width:100%;
-  height:20px;  /* Height of the footer */
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 20px;  /* Height of the footer */
 }
 
+#footer_info_background {
+  float: left;
+}
+#footer_info_credits {
+  float: right;
+}
 
 #show_previous {
   /* rotate 270 degrees */
@@ -68,11 +71,12 @@ ul {
   width: 40%;
   margin: 0px 0px auto 40px /* 40px for show_previous */;
   padding: 10px;
+  height: 100%;
   max-height: 100%;
   overflow: auto;
 }
 
-#recent {
+#main {
   float: right;
   width: 50%;
   margin: auto 40px auto 0px;
@@ -84,35 +88,44 @@ ul {
   padding: 2px;
 }
 
-.event_header, .event_text {
-  color: white;
-}
-
-a, a:hover {
-  color: white;
-  text-decoration:none;
-}
 .event_done_true {
-  text-decoration:line-through;
+  text-decoration: line-through;
+}
+.event {
+  color: white;
 }
 
-/*
- * Alerts
- */
+ul.event {
+  margin: 0px;
+  list-style: none;
+}
+
+a.event,
+a.event:hover {
+  color: white;
+}
+
 .alert {
   padding: 5px;
   background: rgba(255, 255, 0, 0.5);
+  color: black;
 } 
  
-/*
- * Footer
- */
- 
-.footer_info_background {
+.footer {
   color: white;
-  float: left;
 }
-.footer_info_credits {
+a.footer,
+a.footer:hover {
   color: white;
-  float: right;
+}
+
+.editable-wrap {
+    width: 80%;
+}
+textarea.editable-input {
+  width: 100%;
+  height: 60px;
+  padding: 3px;
+  border: none;
+  color: black;
 }
