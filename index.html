@@ -27,7 +27,7 @@
 				<!-- previous entries -->
 				<div id="previous" class="backdrop event" ng-show="show_previous">
 					<h2>Previous Entries</h2>
-					<span>search: <input type="text" ng-model="query"/></span>
+					<span>search: <input type="text" class="editable-input" ng-model="query"/></span>
 						<ul class="event">
 							<li ng-repeat="item in todos | orderObjectBy:'$key':1:true">
 								<h3>{{item.key | date:'EEEE, MMMM d, yyyy'}}</h3>
