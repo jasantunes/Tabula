@@ -1,3 +1,7 @@
+2015-11-23  omri  <omri.ey@walkme.com>
+
+	saving each day in a seperate key, and making sure it doesn't exceed the allowed quota size per item
+
 2014-06-06  Joao Antunes  <jasantunes@gmail.com>
 
 	Fixes search box text color.
