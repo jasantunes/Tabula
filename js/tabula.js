@@ -59,12 +59,60 @@ Tabula.filter('showRecentDays', function() {
 function TabulaController($scope, $filter, $http, gdocs) {
 	
 	// Notice that chrome.storage.sync.get is asynchronous
-  chrome.storage.sync.get('todolist', function(value) {
+  loadq('todolist').then(function (value) {
+    return loadAllDays(value.todolist);
+  }).then(function (todos) {
     // The $apply is only necessary to execute the function inside Angular scope
     $scope.$apply(function() {
-      $scope.load(value);
+      $scope.load({todolist : todos});
     });
   });
+
+  function loadAllDays(keys) {
+    var todos = {};
+    keys = keys || [];
+    return keys.reduce(function (soFar, key) {
+      return soFar.then(function () {
+        return loadDay(key);
+      }).then(function (data) {
+        todos[key] = data;
+      }).fail(function (err) {
+        console.log(err);
+      });
+    }, Q()).then(function () {
+      return todos;
+    });
+  }
+
+  function loadDay(key) {
+    return loadq('todolist-' + key).then(function (value) {
+      return value['todolist-' + key];
+    });
+  }
+
+  function loadq(key) {
+    return Q.Promise(function (resolve, reject) {
+      chrome.storage.sync.get(key, function (value) {
+        if (chrome.runtime.lastError) {
+          reject(chrome.runtime.lastError);
+        } else {
+          resolve(value);
+        }
+      });
+    });
+  }
+
+  function saveq(data) {
+    return Q.Promise(function (resolve, reject) {
+      chrome.storage.sync.set(data, function() {
+        if (chrome.runtime.lastError) {
+          reject(chrome.runtime.lastError);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
   
   // Load data from storage.
   $scope.load = function(value) {
@@ -148,7 +196,7 @@ function TabulaController($scope, $filter, $http, gdocs) {
       for (var i = $scope.todos[day].length; i--;) {
         var todo = $scope.todos[day][i];
         // delete the item
-        if (todo != null && todo.deleted) {
+        if (!todo || todo.deleted) {
           $scope.todos[day].splice(i, 1);
         }
         else {
@@ -160,11 +208,34 @@ function TabulaController($scope, $filter, $http, gdocs) {
         delete $scope.todos[day];
       }
     }
-    
-    chrome.storage.sync.set({'todolist': $scope.todos});
-    console.log("saved");
+
+    var keys = Object.keys($scope.todos);
+    return keys.reduce(function (soFar, key) {
+      return soFar.then(function () {
+        return saveDay(key);
+      }).fail(function (err) {
+        console.log(err);
+      });
+    }, Q()).then(function () {
+      saveq({'todolist': keys});
+    }).then(function () {
+      console.log("saved");  
+    }).fail(function (err) {
+      console.log(err);
+    });
   };
-  
+
+  function saveDay(key) {
+    return Q.Promise(function (resolve, reject) {
+      var data = {};
+      data['todolist-' + key] = $scope.todos[key];
+      if (JSON.stringify(data).length >= chrome.storage.sync.QUOTA_BYTES_PER_ITEM) {
+        return reject('could not save todos for day ' + key);
+      }
+      return saveq(data).then(resolve).fail(reject);
+    });
+  }
+
   /*
    * Add new to-do (today).
    */
