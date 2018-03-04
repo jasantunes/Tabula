@@ -48,10 +48,10 @@
 					<ul class="event">
 						<li ng-repeat="item in todos | showRecentDays:0">
 							<h1>{{ item.key | date:'EEEE, MMMM d, yyyy'}}</h1>
-							<div class="alert alert_warning" ng-show="alert_today_was_populated">
+							<div class="alert alert_warning" ng-show="alerts.today_was_populated">
 								Hi! I populated today's entry with your unfinished to-dos.
 								<button type="button" class="close" aria-hidden="true"
-								ng-click="alert_today_was_populated = false">&times;</button>
+								ng-click="alerts.today_was_populated=false">&times;</button>
 							</div>
 							<ul class="event">
 								<li ng-repeat="event in item">

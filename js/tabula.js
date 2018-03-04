@@ -59,7 +59,7 @@ function TabulaController($scope, $filter, $http, gdocs) {
   // Get background of the day
   $scope.bg_of_the_day = backgrounds[rnd_index];
   console.log("Background of the day: " + $scope.bg_of_the_day.file);
-  $scope.alert_today_was_populated = false;
+  $scope.alerts = {today_was_populated: false};
   $scope.todos = {};
 
   // chrome.storage.sync.get is asynchronous
@@ -112,7 +112,7 @@ function TabulaController($scope, $filter, $http, gdocs) {
             var event_text = older_items[0][i].text;
             console.log("adding: " + event_text);
             $scope.todos[now].push({done:false, text:event_text});
-            $scope.alert_today_was_populated = true;
+            $scope.alerts.today_was_populated = true;
           }
         }
       }
