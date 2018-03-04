@@ -1,10 +1,8 @@
-
-// Initializes to-do list with testing items instead of loading them from storage.
-debug = false;
+"use strict";
 
 function dateNDaysAgo(n) {
   var now = new Date();
-  return new Number(new Date(now.getFullYear(), now.getMonth(), now.getDate()-n));
+  return Number(new Date(now.getFullYear(), now.getMonth(), now.getDate()-n));
 }
 
 var Tabula = angular.module('Tabula', ['xeditable']);
@@ -18,8 +16,8 @@ Tabula.run(function(editableOptions) {
 Tabula.filter('orderObjectBy', function() {
   return function(items, field, from_today, reverse) {
       var filtered = [];
-      var date_threshold = new dateNDaysAgo(from_today);
-      angular.forEach(items, function(item , key) {
+      var date_threshold = dateNDaysAgo(from_today);
+      angular.forEach(items, function(item, key) {
         if (key <= date_threshold) {
           item["key"] = key;
           filtered.push(item);
@@ -40,7 +38,7 @@ Tabula.filter('orderObjectBy', function() {
 Tabula.filter('showRecentDays', function() {
   return function(items, n) {
     var filtered = [];
-    var date_threshold = new dateNDaysAgo(n);
+    var date_threshold = dateNDaysAgo(n);
     angular.forEach(items, function(item , key) {
       if (key >= date_threshold) {
         item["key"] = key;
@@ -57,203 +55,99 @@ Tabula.filter('showRecentDays', function() {
 });
 
 function TabulaController($scope, $filter, $http, gdocs) {
-	
-	// Notice that chrome.storage.sync.get is asynchronous
-  loadq('todolist').then(function (value) {
-    return loadAllDays(value.todolist);
-  }).then(function (todos) {
-    // The $apply is only necessary to execute the function inside Angular scope
-    $scope.$apply(function() {
-      $scope.load({todolist : todos});
-    });
+
+  // Get background of the day
+  $scope.bg_of_the_day = backgrounds[rnd_index];
+  console.log("Background of the day: " + $scope.bg_of_the_day.file);
+  $scope.alert_today_was_populated = false;
+  $scope.todos = {};
+
+  // chrome.storage.sync.get is asynchronous
+  chrome.storage.sync.get(null, todos => {
+    if (chrome.runtime.lastError) {
+      console.log('error reading from chrome sync storage: ', chrome.runtime.lastError);
+    }
+    else {
+      // The $apply is necessary to execute the function inside Angular scope
+      $scope.$apply(() => {
+        $scope.onload(todos);
+      });
+    }
   });
 
-  function loadAllDays(keys) {
-    var todos = {};
-    keys = keys || [];
-    return keys.reduce(function (soFar, key) {
-      return soFar.then(function () {
-        return loadDay(key);
-      }).then(function (data) {
-        todos[key] = data;
-      }).fail(function (err) {
-        console.log(err);
-      });
-    }, Q()).then(function () {
-      return todos;
-    });
-  }
-
-  function loadDay(key) {
-    return loadq('todolist-' + key).then(function (value) {
-      return value['todolist-' + key];
-    });
-  }
-
-  function loadq(key) {
-    return Q.Promise(function (resolve, reject) {
-      chrome.storage.sync.get(key, function (value) {
-        if (chrome.runtime.lastError) {
-          reject(chrome.runtime.lastError);
-        } else {
-          resolve(value);
+  chrome.storage.onChanged.addListener((changes, namespace) => {
+    if (namespace == 'sync') {
+      $scope.$apply(() => {
+        for (let key in changes) {
+          $scope.onload({[key]: changes[key].newValue});
         }
       });
-    });
-  }
-
-  function saveq(data) {
-    return Q.Promise(function (resolve, reject) {
-      chrome.storage.sync.set(data, function() {
-        if (chrome.runtime.lastError) {
-          reject(chrome.runtime.lastError);
-        } else {
-          resolve();
-        }
-      });
-    });
-  }
-  
-  // Load data from storage.
-  $scope.load = function(value) {
-    
-    // Alerts.
-    $scope.alert_today_was_populated = false;
-
-    // Initialization of to-do items.
-    $scope.todos = {};
-    
-    // Get background of the day
-    $scope.bg_of_the_day =  backgrounds[rnd_index];
-    console.log("Background of the day: " + $scope.bg_of_the_day.file);
-    
-    // Initialization for debugging purposes.
-    if (debug) {
-      $scope.todos = {
-          123000000000 : [ {done:true,  text:"event1", deleted:false}, {done:true,  text:"event2", deleted:false}],
-          456000000000 : [ {done:false, text:"event3", deleted:false}, {done:true,  text:"event4", deleted:false},  {done:true, text:"event5", deleted:false}],
-          789000000000 : [ {done:false,  text:"event6", deleted:false}, {done:false, text:"event7", deleted:false}],
-          999000000000 : [ {done:false,  text:"event3", deleted:false}, {done:true, text:"event7", deleted:false}],
-          1000000000000 : [ {done:false,  text:"event3", deleted:false}, {done:true, text:"event7", deleted:false}]
-      };
     }
-    // Load saved data.
-    else if (value && value.todolist) {
-      $scope.todos = value.todolist;
+  });
+
+  // Populate scope with loaded data from storage.
+  $scope.onload = function(value) {
+    console.log('got data from sync', value);
+    $scope.today = dateNDaysAgo(0);
+
+    for (let value_key in value) {
+      if (value_key.startsWith("todolist-")) {
+        let key = Number(value_key.substr("todolist-".length));
+        if (value[value_key])
+          $scope.todos[key] = value[value_key];
+        else
+          delete $scope.todos[key];
+      }
     }
-    
-    // If there's no entry for today, populate new today entry with all pending todo items.
-    var now = dateNDaysAgo(0);
-    var has_today_items = ($scope.todos[now] != null && $scope.todos[now].length > 0);
-    if (!has_today_items) {
-      var older_items = $filter('orderObjectBy')($scope.todos, "key", 1, false);
-      var pending_items = [];
+
+    // If there's no entry for today, populate new today entry with pending todo items
+    // from the most recent day.
+    var now = $scope.today;
+    if (!$scope.todos[now]) {
       $scope.todos[now] = [];
-      console.log("PENDING " + older_items.length);
-      for (var day in older_items) {
-        for (var i = 0; i < older_items[day].length; ++i) {
-          var event_text = older_items[day][i].text;
-          var existing_index =  pending_items.indexOf(event_text);
-          
-          if (!older_items[day][i].done) {
-            // Add all todo items in which we worked on (and haven't concluded).
-            if(existing_index < 0) {
-              console.log("adding: " + event_text);
-              pending_items.push(event_text);
-            }
-          }
-          
-          else {
-            // But remove the todo item if we have conclude it.
-            console.log("removing: " + event_text);
-            if(existing_index >=0 ) {
-              pending_items.splice(existing_index, 1);
-            }
+      var older_items = $filter('orderObjectBy')($scope.todos, "key", 1, true);
+      if (older_items.length > 0) {
+        for (var i = 0; i < older_items[0].length; ++i) {
+          if (!older_items[0][i].done && !older_items[0][i].deleted) {
+            var event_text = older_items[0][i].text;
+            console.log("adding: " + event_text);
+            $scope.todos[now].push({done:false, text:event_text});
+            $scope.alert_today_was_populated = true;
           }
         }
-      }
-      
-      // Now add all pending items to today's entry.
-      if (pending_items.length > 0) {
-	      $scope.alert_today_was_populated = true;
-	      for (var t in pending_items) {
-	        console.log("finally adding: " + pending_items[t]);
-	        $scope.todos[now].push({done:false, text:pending_items[t], deleted:false});        
-	      }
-      }
-      
-    } // if (!has_today_items)
-    
-      
-  };
-  
-  /*
-   * Save data to storage.
-   */
-  $scope.save = function() {
-    for (var day in $scope.todos) {
-      var is_empty = true;
-      for (var i = $scope.todos[day].length; i--;) {
-        var todo = $scope.todos[day][i];
-        // delete the item
-        if (!todo || todo.deleted) {
-          $scope.todos[day].splice(i, 1);
-        }
-        else {
-          is_empty = false;
-        }
-      }
-      // delete empty days
-      if (is_empty) {
-        delete $scope.todos[day];
       }
     }
-
-    var keys = Object.keys($scope.todos);
-    return keys.reduce(function (soFar, key) {
-      return soFar.then(function () {
-        return saveDay(key);
-      }).fail(function (err) {
-        console.log(err);
-      });
-    }, Q()).then(function () {
-      saveq({'todolist': keys});
-    }).then(function () {
-      console.log("saved");  
-    }).fail(function (err) {
-      console.log(err);
-    });
   };
 
-  function saveDay(key) {
-    return Q.Promise(function (resolve, reject) {
-      var data = {};
-      data['todolist-' + key] = $scope.todos[key];
-      if (JSON.stringify(data).length >= chrome.storage.sync.QUOTA_BYTES_PER_ITEM) {
-        return reject('could not save todos for day ' + key);
+  /*
+   * Save a day to storage.
+   */
+  $scope.save = function(day) {
+    console.log("saving", day);
+    let arr = $scope.todos[day]
+      .filter(event => event.text && !event.deleted)
+      .map(event => ({text: event.text, done: event.done}));
+    chrome.storage.sync.set({['todolist-' + day]: arr}, () => {
+      if (chrome.runtime.lastError) {
+        console.log('error writing to chrome sync storage:', chrome.runtime.lastError);
       }
-      return saveq(data).then(resolve).fail(reject);
+      else {
+        console.log('saved');
+      }
     });
-  }
+  };
 
   /*
    * Add new to-do (today).
    */
   $scope.addTodo = function() {
-    var now = dateNDaysAgo(0);
-    
-    if ($scope.todos[now] == null) {
-      console.log("null");
-      $scope.todos[now] = [{done:false, text:$scope.todoText, deleted:false}];
-    } else {
-      console.log("!null");
-      $scope.todos[now].push({done:false, text:$scope.todoText, deleted:false});
+    if ($scope.todoText) {
+      $scope.todos[$scope.today].push({done:false, text:$scope.todoText});
+      $scope.todoText = ''; // clear the form
+      $scope.save($scope.today);
     }
-    
-    // Clear the form.
-    $scope.todoText = '';
   };
-  
+
   /*
    * Archive (delete all elements for now).
    */
@@ -267,4 +161,3 @@ function TabulaController($scope, $filter, $http, gdocs) {
 }
 
 TabulaController.$inject = [ '$scope', '$filter' ];
-
