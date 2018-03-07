@@ -4,7 +4,6 @@
 		<script src="js/angular.min.js"></script>
 		<script src="js/xeditable.min.js"></script>
 		<script src="js/backgrounds.js"></script>
-		<script src="js/q.js"></script>
 		<script src="js/tabula.js"></script>
 		<link href="css/bootstrap-theme.min.css" rel="stylesheet">
 		<link href="css/bootstrap.min.css" rel="stylesheet">
@@ -34,9 +33,9 @@
 								<h3>{{item.key | date:'EEEE, MMMM d, yyyy'}}</h3>
 								<ul class="event" >
 									<li ng-repeat="event in item | filter: query">
-										<input type="checkbox" ng-model="event.done" ng-checked="event.done" ng-change="save()"/>
-										<a href="#" class="event event_done_{{event.done}}" title="click to edit" e-form="itemForm" ng-click="itemForm.$show()" buttons="no" editable-textarea="event.text" blur="submit" onaftersave="save()">{{event.text || save()}}</a>
-										<button class="btn btn-danger" ng-click="event.deleted=true; save()" ng-hide="!itemForm.$visible">delete</button>
+										<input type="checkbox" ng-model="event.done" ng-checked="event.done" ng-change="save(item.key)"/>
+										<a href="#" class="event event_done_{{event.done}}" title="click to edit" e-form="itemForm" ng-click="itemForm.$show()" buttons="no" editable-textarea="event.text" blur="submit" onaftersave="save(item.key)">{{event.text || save(item.key)}}</a>
+										<button class="btn btn-danger" ng-click="event.deleted=true; save(item.key)" ng-hide="!itemForm.$visible">delete</button>
 									</li>
 								</ul>
 							</li>
@@ -49,22 +48,22 @@
 					<ul class="event">
 						<li ng-repeat="item in todos | showRecentDays:0">
 							<h1>{{ item.key | date:'EEEE, MMMM d, yyyy'}}</h1>
-							<div class="alert alert_warning" ng-show="alert_today_was_populated">
+							<div class="alert alert_warning" ng-show="alerts.today_was_populated">
 								Hi! I populated today's entry with your unfinished to-dos.
 								<button type="button" class="close" aria-hidden="true"
-								ng-click="alert_today_was_populated = false">&times;</button>
+								ng-click="alerts.today_was_populated=false">&times;</button>
 							</div>
 							<ul class="event">
 								<li ng-repeat="event in item">
-									<input type="checkbox" ng-model="event.done" ng-checked="event.done" ng-change="save()"/>
-									<a href="#" class="event event_done_{{event.done}}" title="click to edit" e-form="itemForm" ng-click="itemForm.$show()" buttons="no" editable-textarea="event.text" blur="submit" onaftersave="save()">{{event.text || save()}}</a>
-									<button class="btn btn-danger" ng-click="event.deleted=true; save()" ng-hide="!itemForm.$visible">delete</button>
+									<input type="checkbox" ng-model="event.done" ng-checked="event.done" ng-change="save(item.key)"/>
+									<a href="#" class="event event_done_{{event.done}}" title="click to edit" e-form="itemForm" ng-click="itemForm.$show()" buttons="no" editable-textarea="event.text" blur="submit" onaftersave="save(item.key)">{{event.text}}</a>
+									<button class="btn btn-danger" ng-click="event.deleted=true; save(item.key)" ng-hide="!itemForm.$visible">delete</button>
 								</li>
 							</ul>
 						</ul>
 
 						<!-- Add new item -->
-						<form ng-submit="addTodo() || save()">
+						<form ng-submit="addTodo()">
 							<div class="input-group">
 								<input type="text" class="form-control" ng-model="todoText" placeholder="add new task here">
 								<span class="input-group-btn">
