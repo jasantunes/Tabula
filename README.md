@@ -6,13 +6,27 @@ Tabula
 
 A Google Chrome Extension that replaces New Tab with a beautiful TODO list.
 
-I've started this project to learn a bit of frontend programming (javascript, css, angularjs) and because I wanted a nice TODO list manager. 
+I've started this project to learn a bit of frontend programming (javascript, css, angularjs) and because I wanted a nice TODO list manager.
 I was inspired by the beautiful design ans simplistic approch of the chrome extension [Momentum](https://chrome.google.com/webstore/detail/momentum/laookkfknpbbblfpciffpaejjkokdgca). However, I wanted a more complete TODO manager, in particular the ability to log finished TODO items--a sort of personal tracking system.
 
 
 # Contribute
 
 If you like Tabular and you'd like to improve it, embrace the open source spirit, clone the git repository, change it, tweak it, and make it even more awesome.
+
+See https://developer.chrome.com/extensions/getstarted
+
+
+# Publish
+
+Instructions on how to prepare and package the extension before submitting it to the  Chrome Web Store.
+
+1. Update version in `manifest.json` file.
+2. Update tag: `git tag <new_version>`
+3. Update changelog: `github_changelog_generator -u jasantunes -p tabula`
+4. Merge code
+5. Package extension: `zip -r Tabula.zip * -x screenshots/* -x *.zip -x *~`
+6. Upload `Tabula.zip` to Chrome Web Store
 
 
 # Screenshots
